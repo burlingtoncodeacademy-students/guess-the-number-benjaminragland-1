@@ -1,3 +1,4 @@
+const { count } = require("console");
 const readline = require("readline");
 const rl = readline.createInterface(process.stdin, process.stdout);
 
@@ -19,6 +20,7 @@ async function start() {
   };
   let computerGuess = randomNumber();
   let yesOrNo;
+  let guessCounter = 0;
 
   //starts the game. user pics secretNumber. computer makes first guess
   console.log(
@@ -38,7 +40,10 @@ async function start() {
     console.log(`The computer guesses ${computerGuess}`);
     guessQuestion = await ask(`Did I guess correctly?... Y/N : `);
     if (guessQuestion.toUpperCase() === "Y") {
-      console.log("Congratulations!!! You guessed my number!");
+      console.log(`
+      Congratulations!!! You guessed my number!
+      You guessed it in ${guessCounter} tries!
+      `);
       wonGame = true;
       process.exit();
     }
@@ -55,6 +60,7 @@ async function start() {
       max = computerGuess;
     }
     computerGuess = Math.floor((max + min) / 2);
+    guessCounter++;
   }
   // }
   // while (gameWon === false) {
