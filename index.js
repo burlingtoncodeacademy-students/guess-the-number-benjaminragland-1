@@ -10,6 +10,18 @@ function ask(questionText) {
 start();
 
 async function start() {
+  //variables for the while loop
+  let min = 1;
+  let max = 100;
+  let gameWon = false;
+  let randomNumber = () => {
+    return Math.floor((max + min) / 2);
+  };
+  let computerGuess = randomNumber();
+  let yesOrNo;
+  let highOrLow;
+
+  //starts the game. user pics secretNumber. computer makes first guess
   console.log(
     "Let's play a game where you (human) make up a number and I (computer) try to guess it."
   );
@@ -19,19 +31,14 @@ async function start() {
   console.log("You entered: " + secretNumber);
   secretNumber += +secretNumber;
 
-  //variables for the while loop
-  let min = 1;
-  let max = 100;
-  let wonGame = false;
-  let randomNumber = () => Math.floor((max + min) / 2);
-  let computerGuess = randomNumber();
-  while (wonGame === false) {
-    let guessQuestion = await ask(
+  let guessQuestion;
+
+  //loop continues with computer guessing until computerGuess === secretNumber
+  while (gameWon === false) {
+    //make the computer guess a random number between 1 - 100
+    guessQuestion = await ask(
       `Is your secret number ${computerGuess}?... Y/N : `
     );
-    console.log(computerGuess);
-
-    //make the computer guess a random number between 1 - 100
     if (guessQuestion.toUpperCase() === "Y") {
       console.log("Congratulations!!! You guessed my number!");
       wonGame = true;
@@ -41,10 +48,20 @@ async function start() {
         `Is your secret number higher or lower than my guess?... H/L : `
       );
     }
-    if (yesOrNo.toUpperCase() === "H") {
-      min = computerGuess;
-      console.log(min);
-    }
+  }
+
+  if (yesOrNo.toUpperCase() === "H") {
+    min = computerGuess;
+    guessQuestion = await ask(
+      `Is your secret number ${randomNumber()}?... Y/N : `
+    );
+    highOrLow = true;
+  } else if (yesOrNo.toUpperCase() === "L") {
+    max = computerGuess;
+    guessQuestion = await ask(
+      `Is your secret number ${randomNumber()}?... Y/N : `
+    );
+    highOrLow = true;
   }
 }
 
