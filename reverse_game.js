@@ -38,15 +38,38 @@ async function humanGuessingGame() {
   console.log(
     "\nLet's play a game where you I (the computer) make up a number and you (human) try to guess it. Good luck!"
   );
-  let humanGuess = await ask("Take a guess human... ");
-  while (+humanGuess !== secretNumber) {
-    if (+humanGuess === secretNumber) {
+  let humanGuess = await ask(
+    "\nWhat do you think my number is human? Take a guess >_ "
+  );
+  humanGuess = +humanGuess;
+
+  while (gameWon === false) {
+    if (humanGuess === secretNumber) {
       console.log(
-        `You guessed my number! It was in fact ${secretNumber}. You guessed it in ${guessCounter} tries.`
+        `
+        You guessed my number! It was in fact ${secretNumber}. You guessed it in ${guessCounter} tries.
+        `
       );
-    } else if (+humanGuess > secretNumber) {
-      console.log(`You need to lower than ${humanGuess}`);
-      humanGuess = await ask("Please take another guess...");
+      let playAgain = await ask("Would you like you play again? Y/N...");
+      if (playAgain.toUpperCase() === "Y") {
+        gameWon = true;
+        humanGuessingGame();
+        break;
+      } else {
+        console.log("\nThank you for playing the game!\n");
+        process.exit();
+      }
+    }
+    if (humanGuess > secretNumber) {
+      console.log(`You need to guess lower than ${humanGuess}`);
+      humanGuess = await ask("\nPlease take another guess >_ ");
+      humanGuess = +humanGuess;
+      guessCounter++;
+    } else if (humanGuess < secretNumber) {
+      console.log(`You need to guess higher than ${humanGuess}`);
+      humanGuess = await ask("\nPlease take another guess >_ ");
+      humanGuess = +humanGuess;
+      guessCounter++;
     }
   }
 }
