@@ -18,7 +18,7 @@ async function whichGame() {
     computerGuessingGame();
   }
 }
-//computerGuessingGame();
+
 //guessing game where computer tries to guess number picked by human
 async function computerGuessingGame() {
   //variables and functions for the main game while loop
@@ -30,8 +30,6 @@ async function computerGuessingGame() {
   };
   let yesOrNo;
   let guessCounter = 1;
-  let response;
-  let hiLow;
 
   //lets user choose a max number for guessing range or default value is 100
   while (max === undefined) {
@@ -64,8 +62,9 @@ async function computerGuessingGame() {
 
   //loop continues with computer guessing numbers until gameWon === true
   while (gameWon === false) {
-    console.log(`The computer guesses ${computerGuess}`);
-    guessQuestion = await ask(`Did I guess correctly?... Y/N : `);
+    console.log(`The computer guesses ${computerGuess}
+    `);
+    guessQuestion = await ask(`Did I guess correctly?... Y/N >_ `);
     if (guessQuestion.toUpperCase() === "Y") {
       console.log(`
       Congratulations Computer!!! You guessed my number!
@@ -90,7 +89,7 @@ async function computerGuessingGame() {
       process.exit();
     } else if (guessQuestion.toUpperCase() === "N") {
       yesOrNo = await ask(
-        `Is your secret number higher or lower than my guess?... H/L : `
+        `Is your secret number higher or lower than my guess?... H/L >_ `
       );
     }
     if (yesOrNo.toUpperCase() === "H") {
