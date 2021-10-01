@@ -1,4 +1,3 @@
-const { count } = require("console");
 const readline = require("readline");
 const rl = readline.createInterface(process.stdin, process.stdout);
 
@@ -7,6 +6,7 @@ function ask(questionText) {
     rl.question(questionText, resolve);
   });
 }
+
 humanGuessingGame();
 
 async function humanGuessingGame() {
