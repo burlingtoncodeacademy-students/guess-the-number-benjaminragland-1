@@ -8,9 +8,9 @@ function ask(questionText) {
   });
 }
 
-start();
+computerGuessingGame();
 
-async function start() {
+async function computerGuessingGame() {
   //variables and functions for the main game while loop
   let min = 1;
   let max;
@@ -20,6 +20,8 @@ async function start() {
   };
   let yesOrNo;
   let guessCounter = 1;
+  let response;
+  let hiLow;
 
   //lets user choose a max number for guessing range or defaults to 100
   while (max === undefined) {
@@ -64,7 +66,7 @@ async function start() {
       if (playAgain.toUpperCase() === "Y") {
         gameWon = true;
         max = undefined;
-        start();
+        computerGuessingGame();
         break;
       } else {
         console.log("\nThanks for playing the game!!!\n");
@@ -83,7 +85,7 @@ async function start() {
       console.log(`You need to guess lower than ${computerGuess}`);
       max = computerGuess;
     }
-    computerGuess = Math.floor((max + min) / 2);
+    computerGuess = Math.round((max + min) / 2);
     guessCounter++;
   }
 }
