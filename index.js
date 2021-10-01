@@ -47,7 +47,7 @@ async function computerGuessingGame() {
     "What is your secret number?\nI won't peek, I promise...\n"
   );
   console.log("You entered: " + secretNumber);
-  secretNumber += +secretNumber;
+  secretNumber = +secretNumber;
 
   let guessQuestion;
   gameWon = false;
@@ -73,7 +73,11 @@ async function computerGuessingGame() {
         process.exit();
       }
     }
-    if (guessQuestion.toUpperCase() === "N") {
+
+    if (guessQuestion.toUpperCase() === "N" && computerGuess === secretNumber) {
+      console.log("\nYou cheated! I'm outta here!!\n");
+      process.exit();
+    } else if (guessQuestion.toUpperCase() === "N") {
       yesOrNo = await ask(
         `Is your secret number higher or lower than my guess?... H/L : `
       );
