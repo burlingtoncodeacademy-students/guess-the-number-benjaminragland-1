@@ -9,13 +9,13 @@ function ask(questionText) {
 whichGame();
 async function whichGame() {
   let chooseGame = await ask(
-    "Please choose which game you want to play:\nYou vs the computer: 1 >_\nThe computer vs you: 2 >_\n"
+    "Please choose which game you want to play:\nThe computer vs you: 1 >_\nYou vs the computer: 2 >_\n"
   );
 
   if (chooseGame === "1") {
-    humanGuessingGame();
-  } else if (chooseGame === "2") {
     computerGuessingGame();
+  } else if (chooseGame === "2") {
+    humanGuessingGame();
   }
 }
 
@@ -30,6 +30,9 @@ async function computerGuessingGame() {
   };
   let yesOrNo;
   let guessCounter = 1;
+  let guessQuestion;
+  let validNumber = false;
+  let secretNumber;
 
   //lets user choose a max number for guessing range or default value is 100
   while (max === undefined) {
@@ -46,17 +49,21 @@ async function computerGuessingGame() {
 
   //starts the game. user pics secretNumber. computer makes first guess
   console.log(
-    "\nLet's play a game where you (human) make up a number and I (computer) try to guess it."
+    "\nLet's play a game where you (human) make up a number, and I (computer) try to guess it."
   );
 
-  let secretNumber = await ask(
-    "What is your secret number?\nI won't peek, I promise...\n"
-  );
+  while (validNumber === false) {
+    secretNumber = await ask(
+      "What is your secret number?\nI won't peek, I promise...\n"
+    );
+    if (isNaN(secretNumber) || +secretNumber > max) {
+      console.log(`Please choose a valid integer between 1 and ${max}`);
+    } else {
+      validNumber = true;
+    }
+  }
   console.log("You entered: " + secretNumber);
   secretNumber = +secretNumber;
-
-  let guessQuestion;
-  gameWon = false;
 
   //loop continues with computer guessing numbers until gameWon === true
   while (gameWon === false) {
@@ -81,7 +88,7 @@ async function computerGuessingGame() {
       }
     }
 
-    //78-80: anti cheating feature if computer guesses number and human says it's wrong
+    //84-89: anti cheating feature. human forefits right to play again
     if (guessQuestion.toUpperCase() === "N" && computerGuess === secretNumber) {
       console.log("\nYou cheated! I'm outta here!!\n");
       process.exit();
@@ -133,7 +140,7 @@ async function humanGuessingGame() {
 
   //starts the game. computer pics secretNumber. human makes first guess
   console.log(
-    "\nLet's play a game where you I (the computer) make up a number and you (human) try to guess it. Good luck!"
+    "\nLet's play a game where I (the computer) make up a number and you (human) try to guess it. Good luck!"
   );
   let humanGuess = await ask(
     "\nWhat do you think my number is human? Take a guess >_ "
