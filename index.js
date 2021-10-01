@@ -33,11 +33,9 @@ async function computerGuessingGame() {
 
   //lets user choose a max number for guessing range or default value is 100
   while (max === undefined) {
-    max = await ask(
-      `
+    max = await ask(`
       Before we start the guessing game, what number would you like to be the 
-      maximum in the guessing range? Enter a number of your choosing, or N for default value: `
-    );
+      maximum in the guessing range? Enter a number of your choosing, or N for default value: `);
     if (max.toUpperCase() === "N") {
       max = 100;
     } else {
@@ -104,6 +102,8 @@ async function computerGuessingGame() {
   }
 }
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 //guessing game where human tries to guess number picked by computer
 async function humanGuessingGame() {
   //variable declarations for humanGuessingGame
@@ -160,7 +160,11 @@ async function humanGuessingGame() {
         process.exit();
       }
     }
-    if (humanGuess > secretNumber) {
+    if (humanGuess > max || isNaN(+humanGuess)) {
+      console.log(`Please choose a valid integer between 1 and ${max}.`);
+      humanGuess = await ask("\nPlease take another guess >_ ");
+      humanGuess = +humanGuess;
+    } else if (humanGuess > secretNumber) {
       console.log(`You need to guess lower than ${humanGuess}`);
       humanGuess = await ask("\nPlease take another guess >_ ");
       humanGuess = +humanGuess;
