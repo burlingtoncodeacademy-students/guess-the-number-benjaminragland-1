@@ -11,17 +11,17 @@ function ask(questionText) {
 start();
 
 async function start() {
-  //variables for the while loop
+  //variables and functions for the main game while loop
   let min = 1;
   let max;
   let gameWon = false;
   let randomNumber = () => {
     return Math.floor((max + min) / 2);
   };
-
   let yesOrNo;
   let guessCounter = 1;
 
+  //lets user choose a max number for guessing range or defaults to 100
   while (max === undefined) {
     max = await ask(
       `
@@ -35,13 +35,11 @@ async function start() {
     }
   }
   let computerGuess = randomNumber();
+
   //starts the game. user pics secretNumber. computer makes first guess
   console.log(
     "\nLet's play a game where you (human) make up a number and I (computer) try to guess it."
   );
-  // let maxGuessingRange = await ask(
-  //   "What do you want the maximum number in the guessing range to be? "
-  // );
 
   let secretNumber = await ask(
     "What is your secret number?\nI won't peek, I promise...\n"
@@ -51,18 +49,24 @@ async function start() {
 
   let guessQuestion;
 
-  //loop continues with computer guessing until computerGuess === secretNumber
+  //loop continues with computer guessing numbers until gameWon === true
   while (gameWon === false) {
-    //make the computer guess a random number between 1 - 100
     console.log(`The computer guesses ${computerGuess}`);
     guessQuestion = await ask(`Did I guess correctly?... Y/N : `);
     if (guessQuestion.toUpperCase() === "Y") {
       console.log(`
-      Congratulations!!! You guessed my number!
+      Congratulations Computer!!! You guessed my number!
       You guessed it in ${guessCounter} tries!
       `);
-      wonGame = true;
-      process.exit();
+
+      //lets user choose whether or not to play again(*** currently broken if they choose yes ***)
+      let playAgain = await ask("Would you like you play again? Y/N...");
+      if (playAgain.toUpperCase() === "Y") {
+        wonGame = true;
+        start();
+      } else {
+        process.exit();
+      }
     }
     if (guessQuestion.toUpperCase() === "N") {
       yesOrNo = await ask(
@@ -79,28 +83,4 @@ async function start() {
     computerGuess = Math.floor((max + min) / 2);
     guessCounter++;
   }
-  // }
-  // while (gameWon === false) {
-  //   if (yesOrNo.toUpperCase() === "H") {
-  //     console.log(computerGuess);
-  //     min = computerGuess;
-  //   } else if (yesOrNo.toUpperCase() === "L") {
-  //     max = computerGuess;
-  //   }
-  //   computerGuess = Math.floor((max + min) / 2);
-  // }
 }
-
-//tell the computer if the number was correct or not. if not, whether the secret number is higher or lower
-
-//store new number range to reflect if secret number is lower than computer guess
-
-//
-
-// process.exit();
-
-// let numberGenerator = () => {
-//   return Math.round(Math.random() * (max - min) + min);
-// };
-
-//return Math.floor((max + min) / 2);
