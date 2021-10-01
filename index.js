@@ -13,19 +13,36 @@ start();
 async function start() {
   //variables for the while loop
   let min = 1;
-  let max = 100;
+  let max;
   let gameWon = false;
   let randomNumber = () => {
-    return Math.round(Math.random() * (max - min) + min);
+    return Math.floor((max + min) / 2);
   };
-  let computerGuess = randomNumber();
-  let yesOrNo;
-  let guessCounter = 0;
 
+  let yesOrNo;
+  let guessCounter = 1;
+
+  while (max === undefined) {
+    max = await ask(
+      `
+      Before we start the guessing game, what number would you like to be the 
+      maximum in the guessing range? Enter a number of your choosing, or N for default value: `
+    );
+    if (max.toUpperCase() === "N") {
+      max = 100;
+    } else {
+      max = +max;
+    }
+  }
+  let computerGuess = randomNumber();
   //starts the game. user pics secretNumber. computer makes first guess
   console.log(
-    "Let's play a game where you (human) make up a number and I (computer) try to guess it."
+    "\nLet's play a game where you (human) make up a number and I (computer) try to guess it."
   );
+  // let maxGuessingRange = await ask(
+  //   "What do you want the maximum number in the guessing range to be? "
+  // );
+
   let secretNumber = await ask(
     "What is your secret number?\nI won't peek, I promise...\n"
   );
