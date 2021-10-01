@@ -16,7 +16,7 @@ async function start() {
   let max;
   let gameWon = false;
   let randomNumber = () => {
-    return Math.floor((max + min) / 2);
+    return Math.round(Math.random() * (max - min) + min);
   };
   let yesOrNo;
   let guessCounter = 1;
@@ -48,6 +48,7 @@ async function start() {
   secretNumber += +secretNumber;
 
   let guessQuestion;
+  gameWon = false;
 
   //loop continues with computer guessing numbers until gameWon === true
   while (gameWon === false) {
@@ -58,13 +59,15 @@ async function start() {
       Congratulations Computer!!! You guessed my number!
       You guessed it in ${guessCounter} tries!
       `);
-
-      //lets user choose whether or not to play again(*** currently broken if they choose yes ***)
+      //lets user choose whether or not to play again after game has ended
       let playAgain = await ask("Would you like you play again? Y/N...");
       if (playAgain.toUpperCase() === "Y") {
-        wonGame = true;
+        gameWon = true;
+        max = undefined;
         start();
+        break;
       } else {
+        console.log("\nThanks for playing the game!!!\n");
         process.exit();
       }
     }
