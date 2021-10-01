@@ -20,6 +20,7 @@ async function humanGuessingGame() {
   gameWon = false;
   let secretNumber;
 
+  //lets user choose a max number for guessing range or default value is 100
   while (max === undefined) {
     max = await ask(
       `
@@ -34,7 +35,7 @@ async function humanGuessingGame() {
   }
   secretNumber = randomNumber();
 
-  //starts the game. user pics secretNumber. computer makes first guess
+  //starts the game. computer pics secretNumber. human makes first guess
   console.log(
     "\nLet's play a game where you I (the computer) make up a number and you (human) try to guess it. Good luck!"
   );
@@ -43,6 +44,7 @@ async function humanGuessingGame() {
   );
   humanGuess = +humanGuess;
 
+  //loops through program until humanGuess === secretNumber
   while (gameWon === false) {
     if (humanGuess === secretNumber) {
       console.log(
@@ -50,6 +52,8 @@ async function humanGuessingGame() {
         You guessed my number! It was in fact ${secretNumber}. You guessed it in ${guessCounter} tries.
         `
       );
+
+      //lets user choose whether or not to play again after game has ended
       let playAgain = await ask("Would you like you play again? Y/N...");
       if (playAgain.toUpperCase() === "Y") {
         gameWon = true;

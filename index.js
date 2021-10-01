@@ -23,7 +23,7 @@ async function computerGuessingGame() {
   let response;
   let hiLow;
 
-  //lets user choose a max number for guessing range or defaults to 100
+  //lets user choose a max number for guessing range or default value is 100
   while (max === undefined) {
     max = await ask(
       `
