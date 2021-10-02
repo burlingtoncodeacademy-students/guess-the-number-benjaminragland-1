@@ -9,7 +9,7 @@ function ask(questionText) {
 whichGame();
 async function whichGame() {
   let chooseGame = await ask(
-    "Please choose which game you want to play:\nThe computer vs you: 1 >_\nYou vs the computer: 2 >_\n"
+    "Please choose which guessing game you want to play:\nThe computer vs you: 1 >_\nYou vs the computer: 2 >_\n"
   );
 
   if (chooseGame === "1") {
@@ -21,18 +21,19 @@ async function whichGame() {
 
 //guessing game where computer tries to guess number picked by human
 async function computerGuessingGame() {
-  //variables and functions for the main game while loop
+  //variables and function declarations for computerGuessingGame
   let min = 1;
   let max;
   let gameWon = false;
   let randomNumber = () => {
     return Math.round(Math.random() * (max - min) + min);
   };
-  let yesOrNo;
+  let highLow;
   let guessCounter = 1;
   let guessQuestion;
   let validNumber = false;
   let secretNumber;
+  let cheatDetector = false;
 
   //lets user choose a max number for guessing range or default value is 100
   while (max === undefined) {
@@ -69,6 +70,8 @@ async function computerGuessingGame() {
   while (gameWon === false) {
     console.log(`The computer guesses ${computerGuess}
     `);
+    // cheatDetector = +computerGuess;
+    // console.log(cheatDetector);
     guessQuestion = await ask(`Did I guess correctly?... Y/N >_ `);
     if (guessQuestion.toUpperCase() === "Y") {
       console.log(`
@@ -88,19 +91,43 @@ async function computerGuessingGame() {
       }
     }
 
-    //84-89: anti cheating feature. human forefits right to play again
+    //next 3 lines: anti cheating feature. human forefits right to play again
     if (guessQuestion.toUpperCase() === "N" && computerGuess === secretNumber) {
       console.log("\nYou cheated! I'm outta here!!\n");
       process.exit();
     } else if (guessQuestion.toUpperCase() === "N") {
-      yesOrNo = await ask(
+      highLow = await ask(
         `Is your secret number higher or lower than my guess?... H/L >_ `
       );
     }
-    if (yesOrNo.toUpperCase() === "H") {
+
+    //cheat detector if human says lower when the secret number is higher than computerGuess or reverse
+    while (cheatDetector === false) {
+      if (highLow.toUpperCase() === "H" && computerGuess > secretNumber) {
+        console.log(
+          "\nI don't think you are being completely honest with me *growl*...\n"
+        );
+        highLow = await ask(
+          `Is your secret number higher or lower than my guess?... H/L >_ `
+        );
+      } else if (
+        highLow.toUpperCase() === "L" &&
+        computerGuess < secretNumber
+      ) {
+        console.log(
+          "\nI don't think you are being honest with me *growl*...\n"
+        );
+        highLow = await ask(
+          `Is your secret number higher or lower than my guess?... H/L >_ `
+        );
+      } else {
+        break;
+      }
+    }
+    if (highLow.toUpperCase() === "H") {
       console.log(`You need to guess higher than ${computerGuess}`);
       min = computerGuess;
-    } else if (yesOrNo.toUpperCase() === "L") {
+    } else if (highLow.toUpperCase() === "L") {
       console.log(`You need to guess lower than ${computerGuess}`);
       max = computerGuess;
     }
@@ -113,7 +140,7 @@ async function computerGuessingGame() {
 
 //guessing game where human tries to guess number picked by computer
 async function humanGuessingGame() {
-  //variable declarations for humanGuessingGame
+  //variable and function declarations for humanGuessingGame
   let min = 1;
   let max;
   let randomNumber = () => {
