@@ -7,8 +7,6 @@ function ask(questionText) {
   });
 }
 
-let chooseGame;
-
 whichGame();
 //let user decide which game they wold like to play
 
@@ -62,7 +60,7 @@ async function computerGuessingGame() {
 
   //starts the game. user pics secretNumber. computer makes first guess
   console.log(
-    "\nLet's play a game where you (human) make up a number, and I (computer) try to guess it."
+    "\nLet's play a game where you (human) make up a number, and I (computer) try to guess it.\n"
   );
 
   while (validNumber === false) {
@@ -84,6 +82,13 @@ async function computerGuessingGame() {
     `);
 
     guessQuestion = await ask(`Did I guess correctly?... Y/N >_ `);
+    while (
+      guessQuestion.toUpperCase() !== "Y" &&
+      guessQuestion.toUpperCase() !== "N"
+    ) {
+      console.log("\nPlease only choose Y or N");
+      guessQuestion = await ask(`Did I guess correctly?... Y/N >_ `);
+    }
     if (guessQuestion.toUpperCase() === "Y") {
       console.log(`
       Congratulations Computer!!! You guessed my number!
