@@ -16,7 +16,7 @@ async function whichGame() {
     chooseGame = await ask(
       "\nPlease choose which guessing game you want to play:\nThe computer vs you: 1 >_\nYou vs the computer: 2 >_\n"
     );
-    if (isNaN(chooseGame)) {
+    if (chooseGame !== "1" || chooseGame !== "2") {
       console.log("\nPlease choose game 1 or 2\n");
       chooseGame = undefined;
     } else if (chooseGame === "1") {
@@ -47,7 +47,8 @@ async function computerGuessingGame() {
   while (max === undefined) {
     max = await ask(`
       Before we start the guessing game, what number would you like to be the 
-      maximum in the guessing range? Enter a number of your choosing, or N for default value: `);
+      maximum in the guessing range? Enter a number of your choosing, or N for 
+      default value of 100: `);
     if (max.toUpperCase() === "N") {
       max = 100;
     } else if (isNaN(max)) {
@@ -77,7 +78,7 @@ async function computerGuessingGame() {
   console.log("You entered: " + secretNumber);
   secretNumber = +secretNumber;
 
-  //loop continues with computer guessing numbers until gameWon === true
+  //loop continues with computer guessing numbers until computer wins and (gameWon === true)
   while (gameWon === false) {
     console.log(`The computer guesses ${computerGuess}
     `);
@@ -100,7 +101,6 @@ async function computerGuessingGame() {
         process.exit();
       }
     }
-
     //next 3 lines: anti cheating feature. human forefits right to play again
     if (guessQuestion.toUpperCase() === "N" && computerGuess === secretNumber) {
       console.log("\nYou cheated! I'm outta here!!\n");
@@ -164,7 +164,8 @@ async function humanGuessingGame() {
   while (max === undefined) {
     max = await ask(`
       Before we start the guessing game, what number would you like to be the 
-      maximum in the guessing range? Enter a number of your choosing, or N for default value: `);
+      maximum in the guessing range? Enter a number of your choosing, or N for 
+      default value of 100: `);
     if (max.toUpperCase() === "N") {
       max = 100;
     } else if (isNaN(max)) {
