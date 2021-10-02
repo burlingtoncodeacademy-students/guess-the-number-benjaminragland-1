@@ -9,7 +9,6 @@ function ask(questionText) {
 
 whichGame();
 //let user decide which game they wold like to play
-
 async function whichGame() {
   let chooseGame = await ask(
     "Please choose which guessing game you want to play:\nThe computer vs you: 1 >_\nYou vs the computer: 2 >_\n"
@@ -41,7 +40,7 @@ async function computerGuessingGame() {
   let secretNumber;
   let cheatDetector = false;
 
-  //lets user choose a max number for guessing range or default value is 100
+  //lets user choose a max number for guessing range or default value of 100
   while (max === undefined) {
     max = await ask(`
       Before we start the guessing game, what number would you like to be the 
@@ -60,7 +59,7 @@ async function computerGuessingGame() {
 
   //starts the game. user pics secretNumber. computer makes first guess
   console.log(
-    "\nLet's play a game where you (human) make up a number, and I (computer) try to guess it.\n"
+    "\nLet's play a game where you (human) pick a number, and I (computer) try to guess it.\n"
   );
 
   while (validNumber === false) {
@@ -75,6 +74,7 @@ async function computerGuessingGame() {
       validNumber = true;
     }
   }
+
   console.log("You entered: " + secretNumber);
   secretNumber = +secretNumber;
 
@@ -96,6 +96,7 @@ async function computerGuessingGame() {
       Congratulations Computer!!! You guessed my number!
       You guessed it in ${guessCounter} tries!
       `);
+
       //lets user choose whether or not to play again after game has ended
       let playAgain = await ask("Would you like you play again? Y/N...");
       if (playAgain.toUpperCase() === "Y") {
@@ -125,7 +126,7 @@ async function computerGuessingGame() {
       );
     }
 
-    //cheat detector if human says lower when the secret number is higher than computerGuess or reverse
+    //cheat detector: if human says lower when the secret number is higher than computerGuess or reverse
     while (cheatDetector === false) {
       if (highLow.toUpperCase() === "H" && computerGuess > secretNumber) {
         console.log(
@@ -158,81 +159,82 @@ async function computerGuessingGame() {
     computerGuess = Math.round((max + min) / 2);
     guessCounter++;
   }
+}
 
-  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-  //guessing game where human tries to guess number picked by computer
-  async function humanGuessingGame() {
-    //variable and function declarations for humanGuessingGame
-    let min = 1;
-    let max;
-    let randomNumber = () => {
-      return Math.round(Math.random() * (max - min) + min);
-    };
-    let guessCounter = 1;
-    gameWon = false;
-    let secretNumber;
+//guessing game where human tries to guess number picked by computer
+async function humanGuessingGame() {
+  //variable and function declarations for humanGuessingGame
+  let min = 1;
+  let max;
+  let randomNumber = () => {
+    return Math.round(Math.random() * (max - min) + min);
+  };
+  let guessCounter = 1;
+  gameWon = false;
+  let secretNumber;
+  let restartGame = false;
+  let playAgain;
 
-    //lets user choose a max number for guessing range or default value is 100
-    while (max === undefined) {
-      max = await ask(`
+  //lets user choose a max number for guessing range or default value is 100
+  while (max === undefined) {
+    max = await ask(`
       Before we start the guessing game, what number would you like to be the 
       maximum in the guessing range? Enter a number of your choosing, or N for 
       default value of 100: `);
-      if (max.toUpperCase() === "N") {
-        max = 100;
-      } else if (isNaN(max)) {
-        console.log("\nPlease choose a valid integer.");
-        max = undefined;
-      } else {
-        max = +max;
-      }
+    if (max.toUpperCase() === "N") {
+      max = 100;
+    } else if (isNaN(max)) {
+      console.log("\nPlease choose a valid integer.");
+      max = undefined;
+    } else {
+      max = +max;
     }
-    secretNumber = randomNumber();
+  }
+  secretNumber = randomNumber();
 
-    //starts the game. computer pics secretNumber. human makes first guess
-    console.log(
-      "\nLet's play a game where I (the computer) make up a number and you (human) try to guess it. Good luck!"
-    );
-    let humanGuess = await ask(
-      "\nWhat do you think my number is human? Take a guess >_ "
-    );
-    humanGuess = +humanGuess;
+  //starts the game. computer pics secretNumber. human makes first guess
+  console.log(
+    "\nLet's play a game where I (the computer) pick a number, and you (human) try to guess it. Good luck!"
+  );
+  let humanGuess = await ask(
+    "\nWhat do you think my number is human? Take a guess >_ "
+  );
+  humanGuess = +humanGuess;
 
-    //loops through program until humanGuess === secretNumber
-    while (gameWon === false) {
-      if (humanGuess === secretNumber) {
-        console.log(
-          `
+  //loops through program until humanGuess === secretNumber
+  while (gameWon === false) {
+    if (humanGuess > max || isNaN(+humanGuess)) {
+      console.log(`Please choose a valid integer between 1 and ${max}.`);
+      humanGuess = await ask("\nPlease take another guess >_ ");
+      humanGuess = +humanGuess;
+    } else if (humanGuess > secretNumber) {
+      console.log(`You need to guess lower than ${humanGuess}`);
+      humanGuess = await ask("\nPlease take another guess >_ ");
+      humanGuess = +humanGuess;
+      guessCounter++;
+    } else if (humanGuess < secretNumber) {
+      console.log(`You need to guess higher than ${humanGuess}`);
+      humanGuess = await ask("\nPlease take another guess >_ ");
+      humanGuess = +humanGuess;
+      guessCounter++;
+    } else if (humanGuess === secretNumber) {
+      console.log(
+        `
         You guessed my number! It was in fact ${secretNumber}. You guessed it in ${guessCounter} tries.
         `
-        );
+      );
 
-        //lets user choose whether or not to play again after game has ended
-        let playAgain = await ask("Would you like you play again? Y/N...");
-        if (playAgain.toUpperCase() === "Y") {
-          gameWon = true;
-          humanGuessingGame();
-          break;
-        } else {
-          console.log("\nThank you for playing the game!\n");
-          process.exit();
-        }
-      }
-      if (humanGuess > max || isNaN(+humanGuess)) {
-        console.log(`Please choose a valid integer between 1 and ${max}.`);
-        humanGuess = await ask("\nPlease take another guess >_ ");
-        humanGuess = +humanGuess;
-      } else if (humanGuess > secretNumber) {
-        console.log(`You need to guess lower than ${humanGuess}`);
-        humanGuess = await ask("\nPlease take another guess >_ ");
-        humanGuess = +humanGuess;
-        guessCounter++;
-      } else if (humanGuess < secretNumber) {
-        console.log(`You need to guess higher than ${humanGuess}`);
-        humanGuess = await ask("\nPlease take another guess >_ ");
-        humanGuess = +humanGuess;
-        guessCounter++;
+      //lets user choose whether or not to play again after game has ended
+      let playAgain = await ask("Would you like you play again? Y/N...");
+      if (playAgain.toUpperCase() === "Y") {
+        gameWon = true;
+        humanGuessingGame();
+        break;
+      } else {
+        console.log("\nThank you for playing the game!\n");
+        process.exit();
       }
     }
   }

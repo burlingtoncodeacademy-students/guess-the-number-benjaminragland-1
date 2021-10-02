@@ -40,7 +40,7 @@ async function humanGuessingGame() {
 
   //starts the game. computer pics secretNumber. human makes first guess
   console.log(
-    "\nLet's play a game where I (the computer) make up a number and you (human) try to guess it. Good luck!"
+    "\nLet's play a game where I (the computer) pick a number, and you (human) try to guess it. Good luck!"
   );
   let humanGuess = await ask(
     "\nWhat do you think my number is human? Take a guess >_ "
@@ -49,7 +49,21 @@ async function humanGuessingGame() {
 
   //loops through program until humanGuess === secretNumber
   while (gameWon === false) {
-    if (humanGuess === secretNumber) {
+    if (humanGuess > max || isNaN(+humanGuess)) {
+      console.log(`Please choose a valid integer between 1 and ${max}.`);
+      humanGuess = await ask("\nPlease take another guess >_ ");
+      humanGuess = +humanGuess;
+    } else if (humanGuess > secretNumber) {
+      console.log(`You need to guess lower than ${humanGuess}`);
+      humanGuess = await ask("\nPlease take another guess >_ ");
+      humanGuess = +humanGuess;
+      guessCounter++;
+    } else if (humanGuess < secretNumber) {
+      console.log(`You need to guess higher than ${humanGuess}`);
+      humanGuess = await ask("\nPlease take another guess >_ ");
+      humanGuess = +humanGuess;
+      guessCounter++;
+    } else if (humanGuess === secretNumber) {
       console.log(
         `
         You guessed my number! It was in fact ${secretNumber}. You guessed it in ${guessCounter} tries.
@@ -66,21 +80,6 @@ async function humanGuessingGame() {
         console.log("\nThank you for playing the game!\n");
         process.exit();
       }
-    }
-    if (humanGuess > max || isNaN(+humanGuess)) {
-      console.log(`Please choose a valid integer between 1 and ${max}.`);
-      humanGuess = await ask("\nPlease take another guess >_ ");
-      humanGuess = +humanGuess;
-    } else if (humanGuess > secretNumber) {
-      console.log(`You need to guess lower than ${humanGuess}`);
-      humanGuess = await ask("\nPlease take another guess >_ ");
-      humanGuess = +humanGuess;
-      guessCounter++;
-    } else if (humanGuess < secretNumber) {
-      console.log(`You need to guess higher than ${humanGuess}`);
-      humanGuess = await ask("\nPlease take another guess >_ ");
-      humanGuess = +humanGuess;
-      guessCounter++;
     }
   }
 }
