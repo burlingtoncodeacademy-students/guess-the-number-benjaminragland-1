@@ -11,19 +11,19 @@ let chooseGame;
 
 whichGame();
 //let user decide which game they wold like to play
+
 async function whichGame() {
-  while (chooseGame === undefined) {
-    chooseGame = await ask(
-      "\nPlease choose which guessing game you want to play:\nThe computer vs you: 1 >_\nYou vs the computer: 2 >_\n"
-    );
-    if (chooseGame !== "1" || chooseGame !== "2") {
-      console.log("\nPlease choose game 1 or 2\n");
-      chooseGame = undefined;
-    } else if (chooseGame === "1") {
-      computerGuessingGame();
-    } else if (chooseGame === "2") {
-      humanGuessingGame();
-    }
+  let chooseGame = await ask(
+    "Please choose which guessing game you want to play:\nThe computer vs you: 1 >_\nYou vs the computer: 2 >_\n"
+  );
+
+  if (chooseGame === "1") {
+    computerGuessingGame();
+  } else if (chooseGame === "2") {
+    humanGuessingGame();
+  } else {
+    console.log("\nPlease choose only the integer 1 or 2...\n");
+    whichGame();
   }
 }
 
