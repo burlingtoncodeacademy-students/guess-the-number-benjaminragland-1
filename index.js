@@ -11,7 +11,7 @@ whichGame();
 //let user decide which game they wold like to play
 async function whichGame() {
   let chooseGame = await ask(
-    "Please choose which guessing game you want to play:\nThe computer vs you: 1 >_\nYou vs the computer: 2 >_\n"
+    "\nPlease choose which guessing game you want to play:\nThe computer vs you: 1 >_\nYou vs the computer: 2 >_\n"
   );
 
   if (chooseGame === "1") {
@@ -98,7 +98,9 @@ async function computerGuessingGame() {
       `);
 
       //lets user choose whether or not to play again after game has ended
-      let playAgain = await ask("Would you like you play again? Y/N...");
+      let playAgain = await ask(
+        "Press Y to play the game again, or any other key to end the game and exit >_ "
+      );
       if (playAgain.toUpperCase() === "Y") {
         gameWon = true;
         max = undefined;
@@ -114,23 +116,21 @@ async function computerGuessingGame() {
       console.log("\nYou cheated! I'm outta here!!\n");
       process.exit();
     } else if (guessQuestion.toUpperCase() === "N") {
-      highLow = await ask(
-        `Is your secret number higher or lower than my guess?... H/L >_ `
-      );
+      highLow = await ask(`
+Is your secret number higher or lower than my guess?... H/L >_ `);
     }
 
     while (highLow.toUpperCase() !== "H" && highLow.toUpperCase() !== "L") {
       console.log("\nPlease choose only H or L\n");
-      highLow = await ask(
-        `Is your secret number higher or lower than my guess?... H/L >_ `
-      );
+      highLow = await ask(`
+Is your secret number higher or lower than my guess?... H/L >_ `);
     }
 
     //cheat detector: if human says lower when the secret number is higher than computerGuess or reverse
     while (cheatDetector === false) {
       if (highLow.toUpperCase() === "H" && computerGuess > secretNumber) {
         console.log(
-          "\nI don't think you are being completely honest with me *growl*...\n"
+          "\nThis is your conscience speaking... Let's try being honest from now on okay?...\n"
         );
         highLow = await ask(
           `Is your secret number higher or lower than my guess?... H/L >_ `
@@ -140,7 +140,7 @@ async function computerGuessingGame() {
         computerGuess < secretNumber
       ) {
         console.log(
-          "\nI don't think you are being honest with me *growl*...\n"
+          "\nThis is your conscience speaking... Let's try being honest from now on okay?...\n"
         );
         highLow = await ask(
           `Is your secret number higher or lower than my guess?... H/L >_ `
@@ -150,10 +150,12 @@ async function computerGuessingGame() {
       }
     }
     if (highLow.toUpperCase() === "H") {
-      console.log(`You need to guess higher than ${computerGuess}`);
+      console.log(`
+You need to guess higher than ${computerGuess}`);
       min = computerGuess;
     } else if (highLow.toUpperCase() === "L") {
-      console.log(`You need to guess lower than ${computerGuess}`);
+      console.log(`
+You need to guess lower than ${computerGuess}`);
       max = computerGuess;
     }
     computerGuess = Math.round((max + min) / 2);
@@ -227,7 +229,9 @@ async function humanGuessingGame() {
       );
 
       //lets user choose whether or not to play again after game has ended
-      let playAgain = await ask("Would you like you play again? Y/N...");
+      let playAgain = await ask(
+        "Press Y to play the game again, or any other key to end the game and exit >_ "
+      );
       if (playAgain.toUpperCase() === "Y") {
         gameWon = true;
         humanGuessingGame();

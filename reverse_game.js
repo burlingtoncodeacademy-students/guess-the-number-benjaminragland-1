@@ -71,7 +71,9 @@ async function humanGuessingGame() {
       );
 
       //lets user choose whether or not to play again after game has ended
-      let playAgain = await ask("Would you like you play again? Y/N...");
+      let playAgain = await ask(
+        "Press Y to play the game again, or any other key to end the game and exit >_ "
+      );
       if (playAgain.toUpperCase() === "Y") {
         gameWon = true;
         humanGuessingGame();
