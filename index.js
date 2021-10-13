@@ -46,6 +46,8 @@ async function computerGuessingGame() {
       Before we start the guessing game, what number would you like to be the 
       maximum in the guessing range? Enter a number of your choosing, or N for 
       default value of 100: `);
+
+    //sets default value of the max range to 100 if user chooses "N" else the integer of max
     if (max.toUpperCase() === "N") {
       max = 100;
     } else if (isNaN(max)) {
@@ -55,9 +57,10 @@ async function computerGuessingGame() {
       max = +max;
     }
   }
-  let computerGuess = randomNumber();
 
   //starts the game. user pics secretNumber. computer makes first guess
+  let computerGuess = randomNumber();
+
   console.log(
     "\nLet's play a game where you (human) pick a number, and I (computer) try to guess it.\n"
   );
@@ -149,6 +152,8 @@ Is your secret number higher or lower than my guess?... H/L >_ `);
         break;
       }
     }
+
+    //***takes current computerGuess and resets min and max to that value depending on whether or not the guess was higer or lower than the secret number to "make it smarter". essentially halving the range it can guess next time.
     if (highLow.toUpperCase() === "H") {
       console.log(`
 You need to guess higher than ${computerGuess}`);
@@ -158,6 +163,7 @@ You need to guess higher than ${computerGuess}`);
 You need to guess lower than ${computerGuess}`);
       max = computerGuess;
     }
+    //*** Takes the updated min and max range and guesses in the middle. "make it smarter icebox challenge"
     computerGuess = Math.round((max + min) / 2);
     guessCounter++;
   }
@@ -176,8 +182,6 @@ async function humanGuessingGame() {
   let guessCounter = 1;
   gameWon = false;
   let secretNumber;
-  let restartGame = false;
-  let playAgain;
 
   //lets user choose a max number for guessing range or default value is 100
   while (max === undefined) {
@@ -185,6 +189,8 @@ async function humanGuessingGame() {
       Before we start the guessing game, what number would you like to be the 
       maximum in the guessing range? Enter a number of your choosing, or N for 
       default value of 100: `);
+
+    //sets default value of the max range to 100 if user chooses "N" else the integer of max
     if (max.toUpperCase() === "N") {
       max = 100;
     } else if (isNaN(max)) {
@@ -207,10 +213,13 @@ async function humanGuessingGame() {
 
   //loops through program until humanGuess === secretNumber
   while (gameWon === false) {
+    //detects whether or not player chooses a valid integer
     if (humanGuess > max || isNaN(+humanGuess)) {
       console.log(`Please choose a valid integer between 1 and ${max}.`);
       humanGuess = await ask("\nPlease take another guess >_ ");
       humanGuess = +humanGuess;
+
+      //lets player know whether or not they need to guess higer or lower than secret number
     } else if (humanGuess > secretNumber) {
       console.log(`You need to guess lower than ${humanGuess}`);
       humanGuess = await ask("\nPlease take another guess >_ ");
